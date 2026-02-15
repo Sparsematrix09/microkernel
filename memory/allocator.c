@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <stdio.h>
 
+
+
 typedef struct block_meta {
     size_t size;
     int free;
@@ -12,6 +14,11 @@ typedef struct block_meta {
 #define META_SIZE sizeof(block_meta)
 
 static block_meta* global_base = NULL;
+
+void split_block(block_meta* block, size_t size);
+void coalesce();
+block_meta* find_free_block(size_t size);
+block_meta* request_space(block_meta* last, size_t size);
 
 block_meta* find_free_block(size_t size) {
 

@@ -1,17 +1,28 @@
 #include <stdio.h>
-#include "include/allocator.h"
+#include "include/thread.h"
+
+void task1() {
+    
+    for (int i = 0; i < 5; i++) {
+        printf("Task 1: %d\n", i);
+        for (volatile long j = 0; j < 10000000; j++);
+    }
+
+}
+
+void task2() {
+    for (int i = 0; i < 5; i++) {
+        printf("Task 2: %d\n", i);
+        thread_yield();
+    }
+}
 
 int main() {
 
-    void* a = custom_malloc(100);
-    void* b = custom_malloc(200);
-    printf("a: %p\n", a);
-    custom_free(a);
-    custom_free(b);
+    thread_create(task1);
+    thread_create(task2);
 
-    void* c = custom_malloc(250);
-
-    printf("c: %p\n", c);
+    scheduler_start();
 
     return 0;
 }
